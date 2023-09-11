@@ -70,4 +70,10 @@ abstract class Global {
       'tile': 1669,
     }
   ];
+
+  static const Map<int, String> labelMap = {
+    1669: 'Dining',
+    1500: 'Something'
+  };
+
 }

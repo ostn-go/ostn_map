@@ -33,6 +33,29 @@ class GridViewWidget extends StatelessWidget {
                   Container(
                     color: arrayM[currentTile-1] == 0 ? Global.backgroundBlack : arrayM[currentTile-1] == 1 ? Global.wallBlack : Global.pathBlack,
                   ),
+                  if(Global.labelMap[currentTile-1] != null)
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 5.0,
+                      child: Center(
+                        child: Icon(
+                          Icons.dining,
+                          color: Global.blue,
+                          size: 7,
+                        ),
+                      ),
+                    ),
+                  if(Global.labelMap[currentTile-1] != null)
+                    Transform(
+                      transform: Matrix4.identity()..translate(18.0),
+                      child: Text(
+                        'Dining',
+                        style: TextStyle(
+                          fontSize: 6.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                  )
                 ],
               );
             },
