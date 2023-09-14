@@ -13,8 +13,8 @@ class Pos {
 }
 
 class FloorPlanModel extends ChangeNotifier {
-  double _scale = 4.0;
-  double _previousScale = 4.0;
+  double _scale = 1.0;
+  double _previousScale = 1.0;
   Pos _pos = Pos(0.0, 0.0);
   Pos _previousPos = Pos(0.0, 0.0);
   Pos _endPos = Pos(0.0, 0.0);
@@ -65,7 +65,7 @@ class FloorPlanModel extends ChangeNotifier {
   }
 
   void reset() {
-    _scale = 4.0;
+    _scale = 3.0;
     _previousScale = 1.0;
     _pos = Pos(0.0, 0.0);
     _previousPos = Pos(0.0, 0.0);

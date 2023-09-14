@@ -24,11 +24,12 @@ class RawGestureDetectorWidget extends StatelessWidget {
 
   RawGestureDetectorWidget({required this.child});
 
-  @override
-  Widget build(BuildContext context) {
+  @override // overides the build method of the StatelessWidget
+  Widget build(BuildContext context) { // Buildcontext contains information on location of widget on the tree
     final Size size = MediaQuery.of(context).size;
     final model = Provider.of<FloorPlanModel>(context);
 
+    //The first line declares a Map called _gestures. The map will store the gestures that are recognized by the widget
     final _gestures = {
       DragAndScale: GestureRecognizerFactoryWithHandlers<DragAndScale>(
         () => DragAndScale(),
@@ -47,6 +48,7 @@ class RawGestureDetectorWidget extends StatelessWidget {
       )
     };
 
+    // This code is used to align the object to the centre.
     final AlignmentGeometry _alignment = FractionalOffset.fromOffsetAndRect(
       Offset(
         size.width / 2.0,
