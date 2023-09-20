@@ -24,10 +24,12 @@ class FloorPlanScreen extends StatelessWidget {
           color: Global.backgroundBlack,
           child: Center(
             child: Stack(
-              alignment: Alignment.center,
               children: <Widget>[
-                RawGestureDetectorWidget(
-                  child: GridViewWidget(),
+                Align(
+                  alignment: Alignment.center,
+                  child: RawGestureDetectorWidget(
+                    child: GridViewWidget(),
+                  ),
                 ),
                 model.hasTouched ? ResetButtonWidget() : OverlayWidget(),
                 Positioned(

@@ -1,9 +1,20 @@
 import 'package:custom_zoomable_floorplan/core/viewmodels/floorplan_model.dart';
+import 'package:custom_zoomable_floorplan/services/MapDataService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view/screens/floorplan_screen.dart';
 
-void main() => runApp(MyApp());
+
+void main() async {
+  // Load your data asynchronously
+  FloorPlan().floorPlan = await fetchData();
+
+  // printing the floor map fetched from the API
+  print(FloorPlan().floorPlan);
+
+  // Run your Flutter app with the loaded data
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

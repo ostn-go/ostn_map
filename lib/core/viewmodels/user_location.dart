@@ -13,19 +13,14 @@ class Pos {
   }
 }
 
-class FloorPlanModel extends ChangeNotifier {
-  Pos _current_user_pos = Pos(0.0, 0.0);
+class UserLocation {
+  static UserLocation? _instance;
+  Pos pos;
 
-  Pos get current_user_pos => _current_user_pos;
-
-  set current_user_pos(value) {
-    _current_user_pos = value;
-    notifyListeners();
+  factory UserLocation() {
+    _instance ??= UserLocation._(Pos(0.0,0.0));
+    return _instance!;
   }
 
-  void findTheCurrentLocation() {
-    Pos curr = _current_user_pos;
-    _current_user_pos = Pos(curr.x, curr.y);
-  }
-
+  UserLocation._(this.pos);
 }

@@ -1,6 +1,9 @@
 import 'package:custom_zoomable_floorplan/core/models/models.dart';
+import 'package:custom_zoomable_floorplan/core/viewmodels/user_location.dart';
 import 'package:custom_zoomable_floorplan/view/shared/global.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../services/MapDataService.dart';
 
 class Pos {
   double x = 0.0;
@@ -12,10 +15,23 @@ class Pos {
   }
 }
 
+class FloorPlan {
+  static FloorPlan? _instance;
+  List floorPlan;
+
+  factory FloorPlan() {
+    _instance ??= FloorPlan._([]);
+    return _instance!;
+  }
+
+  FloorPlan._(this.floorPlan);
+}
+
 class FloorPlanModel extends ChangeNotifier {
   double _scale = 1.0;
   double _previousScale = 1.0;
   Pos _pos = Pos(0.0, 0.0);
+  Pos _cus_pos = Pos(0.0, 0.0);
   Pos _previousPos = Pos(0.0, 0.0);
   Pos _endPos = Pos(0.0, 0.0);
   bool _isScaled = false;
@@ -31,6 +47,12 @@ class FloorPlanModel extends ChangeNotifier {
   bool get hasTouched => _hasTouched;
   set hasTouched(value) {
     _hasTouched = value;
+    notifyListeners();
+  }
+
+  Pos get cus_pos => _cus_pos;
+  set cus_pos(value) {
+    _cus_pos = value;
     notifyListeners();
   }
 
@@ -64,10 +86,14 @@ class FloorPlanModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void reset() {
+  reset() async {
+   // print(fetchData());
+   // List<dynamic> dynamicList = await fetchData();
+   // List<int> intList = dynamicList.map((item) => item as int).toList();
+   // print(intList[0]);
     _scale = 3.0;
     _previousScale = 1.0;
-    _pos = Pos(0.0, 0.0);
+    _pos = Pos(-1*UserLocation().pos.x, UserLocation().pos.y);
     _previousPos = Pos(0.0, 0.0);
     _endPos = Pos(0.0, 0.0);
     _isScaled = false;

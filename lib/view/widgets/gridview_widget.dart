@@ -63,7 +63,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
   @override
   Widget build(BuildContext context) {
 
-    final arrayM = Global.floorPlan;
+    final arrayM = FloorPlan().floorPlan;
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -94,8 +94,8 @@ class _GridViewWidgetState extends State<GridViewWidget> {
         ),
         Transform.translate(
           offset: Offset(
-            _x!*0,
-            _y!*-25 + 12,
+            iconX,
+            iconY,
           ),
           child: Container(
               width: 30,
