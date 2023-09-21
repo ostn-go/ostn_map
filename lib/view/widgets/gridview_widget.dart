@@ -13,6 +13,7 @@ import '../../services/MapDataService.dart';
 class GridViewWidget extends StatefulWidget {
   @override
   State<GridViewWidget> createState() => _GridViewWidgetState();
+
 }
 
 
@@ -20,6 +21,9 @@ class _GridViewWidgetState extends State<GridViewWidget> {
   double iconX = 0.0;
   double iconY = 0.0;
   double iconSpeed = 0.5;
+  bool isNavigationOn = true;
+  FloorPlanModel floorPlanModel = FloorPlanModel();
+
   late Future<List<dynamic>> dynamicList;
   // This key will be associated with the amber box
   final GlobalKey _key = GlobalKey();
@@ -41,21 +45,24 @@ class _GridViewWidgetState extends State<GridViewWidget> {
   @override
   void initState() {
     super.initState();
-    dynamicList = fetchData();
+    List<BleUserPosition> bleUserPosition = [];
+    final model = Provider.of<FloorPlanModel>(context, listen: false);
     // print(intList[0]);
 
-    Timer.periodic(Duration(milliseconds: 100), (timer) {
-      setState(() {
-        if(iconX > 100){
-          iconX =0.0;
-        }
-        else {
+    Timer.periodic(Duration(milliseconds: 800), (timer) {
+      // Make an API call to fetch data
+      fetchUserLocation(bleUserPosition).then((data) {
+        setState(() {
           _getOffset(_key);
-          iconX += iconSpeed;
-
-        }
-        UserLocation().pos.x = iconX;
-        UserLocation().pos.y = iconY;
+          print(IsNavigationOn().isNavigationOn);
+          if(IsNavigationOn().isNavigationOn) {
+            model.trackUser();
+          }
+          iconX =   ((_x!*(data['x']-25)) + (_x!/2));
+          iconY =  ((_y!*(data['y']-25)) + (_y!/2)   +12);
+          UserLocation().pos.x = iconX;
+          UserLocation().pos.y = -1*iconY;
+        });
       });
     });
   }
@@ -85,7 +92,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                   key: currentTile ==1 ? _key :null,
                   height: 10,
                   width: 10,
-                  color: currentTile ==25 ? Colors.red : arrayM[currentTile-1] == 0 ? Global.backgroundBlack : arrayM[currentTile-1] == 1 ? Global.wallBlack: Global.pathBlack
+                  color: currentTile ==25 ? Global.backgroundBlack : arrayM[currentTile-1] == 0 ? Global.backgroundBlack : arrayM[currentTile-1] == 1 ? Global.wallBlack: Global.pathBlack
                 ),
                 // Icon positioned on top of the main widget
               ],

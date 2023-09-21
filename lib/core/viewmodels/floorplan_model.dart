@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:custom_zoomable_floorplan/core/models/models.dart';
 import 'package:custom_zoomable_floorplan/core/viewmodels/user_location.dart';
 import 'package:custom_zoomable_floorplan/view/shared/global.dart';
@@ -86,13 +88,21 @@ class FloorPlanModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  reset() async {
-   // print(fetchData());
-   // List<dynamic> dynamicList = await fetchData();
-   // List<int> intList = dynamicList.map((item) => item as int).toList();
-   // print(intList[0]);
+  reset()  {
+    bool check = IsNavigationOn().isNavigationOn;
+    IsNavigationOn().isNavigationOn = !check;
     _scale = 3.0;
     _previousScale = 1.0;
+    _pos = Pos(-1*UserLocation().pos.x, UserLocation().pos.y);
+    _previousPos = Pos(0.0, 0.0);
+    _endPos = Pos(0.0, 0.0);
+    _isScaled = false;
+    notifyListeners();
+  }
+
+  trackUser()  {
+   // _scale = 3.0;
+   // _previousScale = 1.0;
     _pos = Pos(-1*UserLocation().pos.x, UserLocation().pos.y);
     _previousPos = Pos(0.0, 0.0);
     _endPos = Pos(0.0, 0.0);

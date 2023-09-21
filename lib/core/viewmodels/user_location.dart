@@ -1,13 +1,9 @@
 
-import 'package:custom_zoomable_floorplan/core/models/models.dart';
-import 'package:custom_zoomable_floorplan/view/shared/global.dart';
-import 'package:flutter/cupertino.dart';
-
-class Pos {
+class PosUser {
   double x = 0.0;
   double y = 0.0;
 
-  Pos(x, y) {
+  PosUser(x, y) {
     this.x = x;
     this.y = y;
   }
@@ -15,12 +11,25 @@ class Pos {
 
 class UserLocation {
   static UserLocation? _instance;
-  Pos pos;
+  PosUser pos;
 
   factory UserLocation() {
-    _instance ??= UserLocation._(Pos(0.0,0.0));
+    _instance ??= UserLocation._(PosUser(0.0,0.0));
     return _instance!;
   }
 
   UserLocation._(this.pos);
+}
+
+
+class IsNavigationOn {
+  static IsNavigationOn? _instance;
+  bool isNavigationOn;
+
+  factory IsNavigationOn() {
+    _instance ??= IsNavigationOn._(false);
+    return _instance!;
+  }
+
+  IsNavigationOn._(this.isNavigationOn);
 }

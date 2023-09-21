@@ -1,3 +1,5 @@
+import '../viewmodels/floorplan_model.dart';
+
 class Light {
   late String location;
   late String name;
@@ -13,4 +15,15 @@ class Light {
     this.tile = data['tile'] ?? 0;
   }
 
+}
+
+class BleUserPosition {
+  late Pos coordinates;
+  late double distance;
+
+
+  BleUserPosition(coordinates,distance) {
+    this.coordinates = coordinates;
+    this.distance = distance;
+  }
 }
