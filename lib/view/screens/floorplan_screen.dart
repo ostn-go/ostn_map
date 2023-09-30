@@ -31,7 +31,7 @@ class FloorPlanScreen extends StatelessWidget {
                     child: GridViewWidget(),
                   ),
                 ),
-                model.hasTouched ? ResetButtonWidget() : OverlayWidget(),
+                ResetButtonWidget(),
                 Positioned(
                   top: 20, // Adjust the position as needed
                   left: 20, // Adjust the position as needed

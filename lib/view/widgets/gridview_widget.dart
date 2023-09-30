@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 import 'dart:async';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../services/MapDataService.dart';
 
 class GridViewWidget extends StatefulWidget {
@@ -23,24 +23,21 @@ class _GridViewWidgetState extends State<GridViewWidget> {
   double iconSpeed = 0.5;
   bool isNavigationOn = true;
   FloorPlanModel floorPlanModel = FloorPlanModel();
-
+  String imageUrl = "http://localhost:8082/ostn/image/1001";
   late Future<List<dynamic>> dynamicList;
-  // This key will be associated with the amber box
-  final GlobalKey _key = GlobalKey();
-
   // Coordinates
-  double? _x=0.0, _y=0.0;
-
+  final GlobalKey _key = GlobalKey();
   // This function is called when the user presses the floating button
   void _getOffset(GlobalKey key) {
 
     final RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
     final Size size = renderBox.size;
-    _x = size.width;
-    _y = size.height;
+    _x = size.width/50;
+    _y = size.height/50;
 
 
   }
+  double? _x=5.0, _y=5.0;
 
   @override
   void initState() {
@@ -54,12 +51,14 @@ class _GridViewWidgetState extends State<GridViewWidget> {
       fetchUserLocation(bleUserPosition).then((data) {
         setState(() {
           _getOffset(_key);
+          print(_x);
+          print(_y);
           print(IsNavigationOn().isNavigationOn);
           if(IsNavigationOn().isNavigationOn) {
             model.trackUser();
           }
           iconX =   ((_x!*(data['x']-25)) + (_x!/2));
-          iconY =  ((_y!*(data['y']-25)) + (_y!/2)   +12);
+          iconY =  ((_y!*(data['y']-25)) + (_y!/2));
           UserLocation().pos.x = iconX;
           UserLocation().pos.y = -1*iconY;
         });
@@ -69,34 +68,27 @@ class _GridViewWidgetState extends State<GridViewWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-    final arrayM = FloorPlan().floorPlan;
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //crossAxisSpacing: 2.0,
-            //mainAxisSpacing: 2.0,
-            crossAxisCount: 50,
-            childAspectRatio: 1.0,
-          ),
-          itemCount: 2500,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            int currentTile = index + 1;
-            return Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Container(
-                  key: currentTile ==1 ? _key :null,
-                  height: 10,
-                  width: 10,
-                  color: currentTile ==25 ? Global.backgroundBlack : arrayM[currentTile-1] == 0 ? Global.backgroundBlack : arrayM[currentTile-1] == 1 ? Global.wallBlack: Global.pathBlack
-                ),
-                // Icon positioned on top of the main widget
-              ],
-            );
+        Image.network(
+          key: _key,
+          imageUrl,
+          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child; // If there's no progress, return the image.
+            } else {
+              // Show a loading indicator while the image is being loaded.
+              return CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
+              );
+            }
+          },
+          errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+            // Handle errors, for example, by displaying an error icon.
+            return Icon(Icons.error);
           },
         ),
         Transform.translate(

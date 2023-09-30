@@ -7,10 +7,10 @@ import 'view/screens/floorplan_screen.dart';
 
 void main() async {
   // Load your data asynchronously
-  FloorPlan().floorPlan = await fetchData();
+  //FloorPlan().floorPlan = await fetchData();
 
   // printing the floor map fetched from the API
-  print(FloorPlan().floorPlan);
+  //print(FloorPlan().floorPlan);
 
   // Run your Flutter app with the loaded data
   runApp(MyApp());
