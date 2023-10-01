@@ -7,6 +7,8 @@ abstract class Global {
   static const Color pathBlack = const Color(0xFF455A64);
   static const Color fontBlack = const Color(0xFF212121);
   static const Color orangeMapIcon = const Color(0xFFF57F17);
+  static const Color redLocationIconColor = const Color(0xFFE53935);
+
 
   static const List lights = [
     {

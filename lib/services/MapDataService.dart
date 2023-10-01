@@ -19,6 +19,20 @@ Future<List<dynamic>> fetchData() async {
 
 }
 
+Future<List<dynamic>> fetchLabels() async {
+  final response = await http.get(Uri.parse('http://localhost:8082/ostn/label/get/1001'));
+  if (response.statusCode == 200) {
+    // Parse the JSON response if successful
+    final data = jsonDecode(response.body);
+
+    return data;
+  } else {
+    return [];
+  }
+
+
+}
+
 
 Future<dynamic> fetchUserLocation(List<BleUserPosition> bleUserInputs) async {
   final Map<String, String> headers = {
@@ -45,5 +59,34 @@ Future<dynamic> fetchUserLocation(List<BleUserPosition> bleUserInputs) async {
   }
 
 
+}
+
+Future<dynamic> fetchUserLocation_1(List<BleUserPosition> bleUserInputs) async {
+  final Map<String, String> headers = {
+    'Content-Type': 'application/json', // Adjust content type as needed
+  };
+
+  // Encode query parameters
+  final Map<String, dynamic> queryParameters = {
+    // Add query parameters as needed
+  };
+
+  // Build the URL with query parameters
+  final Uri uri = Uri.parse('http://localhost:8080/triangulate_demo1')
+      .replace(queryParameters: queryParameters);
+
+  final response = await http.get(
+    uri,
+    headers: headers,
+  );
+
+  if (response.statusCode == 200) {
+    // Parse the JSON response if successful
+    final data = jsonDecode(response.body);
+
+    return data;
+  } else {
+    return [];
+  }
 }
 

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../core/viewmodels/map_labels.dart';
 import '../../services/MapDataService.dart';
 
 class GridViewWidget extends StatefulWidget {
@@ -27,6 +28,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
   late Future<List<dynamic>> dynamicList;
   // Coordinates
   final GlobalKey _key = GlobalKey();
+  List<LabelDetails> labelDetails = LabelDetailsResult().labelDetails;
   // This function is called when the user presses the floating button
   void _getOffset(GlobalKey key) {
 
@@ -37,6 +39,9 @@ class _GridViewWidgetState extends State<GridViewWidget> {
 
 
   }
+
+
+
   double? _x=5.0, _y=5.0;
 
   @override
@@ -46,9 +51,9 @@ class _GridViewWidgetState extends State<GridViewWidget> {
     final model = Provider.of<FloorPlanModel>(context, listen: false);
     // print(intList[0]);
 
-    Timer.periodic(Duration(milliseconds: 800), (timer) {
+    Timer.periodic(Duration(milliseconds: 2000), (timer) {
       // Make an API call to fetch data
-      fetchUserLocation(bleUserPosition).then((data) {
+      fetchUserLocation_1(bleUserPosition).then((data) {
         setState(() {
           _getOffset(_key);
           print(_x);
@@ -57,8 +62,10 @@ class _GridViewWidgetState extends State<GridViewWidget> {
           if(IsNavigationOn().isNavigationOn) {
             model.trackUser();
           }
-          iconX =   ((_x!*(data['x']-25)) + (_x!/2));
-          iconY =  ((_y!*(data['y']-25)) + (_y!/2));
+          iconX =    iconX + data['x']*_x;
+          iconY =  iconY + data['y']*_y;
+         // iconX =   ((_x!*(data['x']-25)) + (_x!/2));
+         // iconY =  ((_y!*(data['y']-25)) + (_y!/2));
           UserLocation().pos.x = iconX;
           UserLocation().pos.y = -1*iconY;
         });
@@ -111,6 +118,50 @@ class _GridViewWidgetState extends State<GridViewWidget> {
               )
           ),
         ),
+        Stack(
+          children: List.generate(
+            labelDetails.length,
+                (idx) {
+              return Transform.translate(
+                offset: Offset(
+                  ((_x!*(labelDetails[idx].xCoordinate-25)) + (_x!/2)),
+                  ((_x!*(labelDetails[idx].yCoordinate-25)) + (_x!/2)),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 14.0, // Set the desired fixed radius
+                      child: IgnorePointer(
+                        child: Center(
+                          child: Icon(
+                            labelDetails[idx].iconName != 'sample'
+                                ? IconData(int.parse(labelDetails[idx].iconName, radix: 16), fontFamily: 'MaterialIcons')
+                                : Icons.location_on,
+                            color: Global.redLocationIconColor,
+                            size: 14,
+                          ),
+                        ),
+                      ),
+                    ) ,
+                    Transform(
+                      transform: Matrix4.identity()..translate(0.0,10.0),
+                      child: Text(
+                        labelDetails[idx].labelName,
+                        style: TextStyle(
+                          fontSize: 6.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+
       ],
     );
   }
