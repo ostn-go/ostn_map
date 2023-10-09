@@ -33,3 +33,15 @@ class IsNavigationOn {
 
   IsNavigationOn._(this.isNavigationOn);
 }
+
+class MinMapTileSize {
+  static MinMapTileSize? _instance;
+  double minMapTileSize;
+
+  factory MinMapTileSize() {
+    _instance ??= MinMapTileSize._(0.0);
+    return _instance!;
+  }
+
+  MinMapTileSize._(this.minMapTileSize);
+}

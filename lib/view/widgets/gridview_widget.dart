@@ -51,23 +51,21 @@ class _GridViewWidgetState extends State<GridViewWidget> {
     final model = Provider.of<FloorPlanModel>(context, listen: false);
     // print(intList[0]);
 
-    Timer.periodic(Duration(milliseconds: 2000), (timer) {
+    Timer.periodic(Duration(milliseconds: 1000), (timer) {
       // Make an API call to fetch data
-      fetchUserLocation_1(bleUserPosition).then((data) {
+      fetchUserLocation(bleUserPosition).then((data) {
         setState(() {
           _getOffset(_key);
-          print(_x);
-          print(_y);
-          print(IsNavigationOn().isNavigationOn);
+          MinMapTileSize().minMapTileSize=_x!;
           if(IsNavigationOn().isNavigationOn) {
             model.trackUser();
           }
-          iconX =    iconX + data['x']*_x;
-          iconY =  iconY + data['y']*_y;
-         // iconX =   ((_x!*(data['x']-25)) + (_x!/2));
-         // iconY =  ((_y!*(data['y']-25)) + (_y!/2));
+          //iconX =    iconX + data['x']*_x;
+          //iconY =  iconY + data['y']*_y;
+          iconX =   ((_x!*(data['x']-25)) + (_x!/2));
+          iconY =  ((_y!*(data['y']-25)) + (_y!/2));
           UserLocation().pos.x = iconX;
-          UserLocation().pos.y = -1*iconY;
+          UserLocation().pos.y = iconY;
         });
       });
     });

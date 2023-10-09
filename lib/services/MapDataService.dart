@@ -72,7 +72,7 @@ Future<dynamic> fetchUserLocation_1(List<BleUserPosition> bleUserInputs) async {
   };
 
   // Build the URL with query parameters
-  final Uri uri = Uri.parse('http://localhost:8080/triangulate_demo1')
+  final Uri uri = Uri.parse('http://localhost:8080/triangulate_demo')
       .replace(queryParameters: queryParameters);
 
   final response = await http.get(

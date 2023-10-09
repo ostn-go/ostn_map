@@ -93,7 +93,7 @@ class FloorPlanModel extends ChangeNotifier {
     IsNavigationOn().isNavigationOn = !check;
     _scale = 3.0;
     _previousScale = 1.0;
-    _pos = Pos(-1*UserLocation().pos.x, UserLocation().pos.y);
+    _pos = Pos(-1*UserLocation().pos.x, -1*UserLocation().pos.y);
     _previousPos = Pos(0.0, 0.0);
     _endPos = Pos(0.0, 0.0);
     _isScaled = false;
@@ -103,7 +103,20 @@ class FloorPlanModel extends ChangeNotifier {
   trackUser()  {
    // _scale = 3.0;
    // _previousScale = 1.0;
-    _pos = Pos(-1*UserLocation().pos.x, UserLocation().pos.y);
+    _pos = Pos(-1*UserLocation().pos.x, -1*UserLocation().pos.y);
+    _previousPos = Pos(0.0, 0.0);
+    _endPos = Pos(0.0, 0.0);
+    _isScaled = false;
+    notifyListeners();
+  }
+
+  moveToLabelLocation(double x,double y)  {
+    // _scale = 3.0;
+    // _previousScale = 1.0;
+
+    _scale = 3.0;
+    _previousScale = 1.0;
+    _pos = Pos(x, y);
     _previousPos = Pos(0.0, 0.0);
     _endPos = Pos(0.0, 0.0);
     _isScaled = false;

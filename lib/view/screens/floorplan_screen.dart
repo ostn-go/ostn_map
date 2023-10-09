@@ -8,7 +8,16 @@ import 'package:custom_zoomable_floorplan/view/widgets/reset_button_widget.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FloorPlanScreen extends StatelessWidget {
+import '../widgets/search_button_widget.dart';
+import 'CustomSearchDelegate.dart';
+
+class FloorPlanScreenWidget extends StatefulWidget {
+  @override
+  State<FloorPlanScreenWidget> createState() => _FloorPlanScreen();
+
+}
+
+class _FloorPlanScreen extends State<FloorPlanScreenWidget> {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<FloorPlanModel>(context);
@@ -32,25 +41,15 @@ class FloorPlanScreen extends StatelessWidget {
                   ),
                 ),
                 ResetButtonWidget(),
-                Positioned(
-                  top: 20, // Adjust the position as needed
-                  left: 20, // Adjust the position as needed
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.transparent,
-                    child: Center(
-                      child: Text(
-                        'OSTN',
-                        style: TextStyle(
-                          color: Global.fontBlack,
-                          fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                SearchButtonWidget(
+                  onPressedCallback: () {
+                    // Add your custom onPressed logic here
+                    showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(), // Your custom delegate
+                    );
+                  },
+                )
               ],
             ),
           ),
