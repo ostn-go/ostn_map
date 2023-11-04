@@ -51,8 +51,8 @@ class RawGestureDetectorWidget extends StatelessWidget {
     // This code is used to align the object to the centre.
     final AlignmentGeometry _alignment = FractionalOffset.fromOffsetAndRect(
       Offset(
-        size.width / 2.0,
-        size.height / 2.0,
+        (size.width / 2.0),
+        (size.height / 2.0),
       ),
       Rect.fromLTRB(
         0.0,
@@ -68,10 +68,13 @@ class RawGestureDetectorWidget extends StatelessWidget {
         model.scale,
         model.scale,
       ),
-    )..translate(
+    )
+
+      ..translate(
         model.pos.x,
         model.pos.y,
-      );
+      )
+      ..rotateZ(model.currAngle);
 
     return RawGestureDetector(
       gestures: _gestures,

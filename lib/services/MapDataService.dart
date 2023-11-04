@@ -33,6 +33,28 @@ Future<List<dynamic>> fetchLabels() async {
 
 }
 
+Future<List<dynamic>> fetchBuildingMap() async {
+  final response = await http.get(Uri.parse('http://localhost:8082/ostn/building/1001/'));
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+
+    return data;
+  } else {
+    return [];
+  }
+}
+
+Future<List<dynamic>> fetchTransportDetails() async {
+  final response = await http.get(Uri.parse('http://localhost:8082/ostn/transport_mode/1001'));
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+
+    return data;
+  } else {
+    return [];
+  }
+}
+
 
 Future<dynamic> fetchUserLocation(List<BleUserPosition> bleUserInputs) async {
   final Map<String, String> headers = {
@@ -90,3 +112,25 @@ Future<dynamic> fetchUserLocation_1(List<BleUserPosition> bleUserInputs) async {
   }
 }
 
+
+Future<dynamic> fetchDirectionDots(DirectionDotRequest directionDotRequest) async {
+  final Map<String, String> headers = {
+    'Content-Type': 'application/json', // Adjust content type as needed
+  };
+
+  String json = jsonEncode(directionDotRequest.toJson());
+  final response = await http.post(
+    Uri.parse('http://127.0.0.1:5000/pathCoordinates'),
+    headers: headers,
+    body: json,);
+  if (response.statusCode == 200) {
+    // Parse the JSON response if successful
+    final data = jsonDecode(response.body);
+
+    return data;
+  } else {
+    return [];
+  }
+
+
+}

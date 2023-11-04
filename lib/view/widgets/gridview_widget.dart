@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:custom_zoomable_floorplan/core/models/models.dart';
 import 'package:custom_zoomable_floorplan/core/viewmodels/floorplan_model.dart';
 import 'package:custom_zoomable_floorplan/core/viewmodels/user_location.dart';
@@ -24,11 +26,12 @@ class _GridViewWidgetState extends State<GridViewWidget> {
   double iconSpeed = 0.5;
   bool isNavigationOn = true;
   FloorPlanModel floorPlanModel = FloorPlanModel();
-  String imageUrl = "http://localhost:8082/ostn/image/1001";
+
   late Future<List<dynamic>> dynamicList;
   // Coordinates
   final GlobalKey _key = GlobalKey();
   List<LabelDetails> labelDetails = LabelDetailsResult().labelDetails;
+
   // This function is called when the user presses the floating button
   void _getOffset(GlobalKey key) {
 
@@ -40,28 +43,19 @@ class _GridViewWidgetState extends State<GridViewWidget> {
 
   }
 
-
-
   double? _x=5.0, _y=5.0;
 
   @override
   void initState() {
     super.initState();
     List<BleUserPosition> bleUserPosition = [];
-    final model = Provider.of<FloorPlanModel>(context, listen: false);
-    // print(intList[0]);
-
     Timer.periodic(Duration(milliseconds: 1000), (timer) {
-      // Make an API call to fetch data
       fetchUserLocation(bleUserPosition).then((data) {
         setState(() {
+          FloorMapUrl().imageUrl = "http://localhost:8082/ostn/image/1001/" + FloorMapUrl().currentFloor.toString();
           _getOffset(_key);
+          DirectionDotStart().pos = DirectionDotPos(data['x'].toInt(),data['y'].toInt());
           MinMapTileSize().minMapTileSize=_x!;
-          if(IsNavigationOn().isNavigationOn) {
-            model.trackUser();
-          }
-          //iconX =    iconX + data['x']*_x;
-          //iconY =  iconY + data['y']*_y;
           iconX =   ((_x!*(data['x']-25)) + (_x!/2));
           iconY =  ((_y!*(data['y']-25)) + (_y!/2));
           UserLocation().pos.x = iconX;
@@ -78,7 +72,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
       children: <Widget>[
         Image.network(
           key: _key,
-          imageUrl,
+          FloorMapUrl().imageUrl,
           loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
             if (loadingProgress == null) {
               return child; // If there's no progress, return the image.
@@ -116,50 +110,6 @@ class _GridViewWidgetState extends State<GridViewWidget> {
               )
           ),
         ),
-        Stack(
-          children: List.generate(
-            labelDetails.length,
-                (idx) {
-              return Transform.translate(
-                offset: Offset(
-                  ((_x!*(labelDetails[idx].xCoordinate-25)) + (_x!/2)),
-                  ((_x!*(labelDetails[idx].yCoordinate-25)) + (_x!/2)),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      radius: 14.0, // Set the desired fixed radius
-                      child: IgnorePointer(
-                        child: Center(
-                          child: Icon(
-                            labelDetails[idx].iconName != 'sample'
-                                ? IconData(int.parse(labelDetails[idx].iconName, radix: 16), fontFamily: 'MaterialIcons')
-                                : Icons.location_on,
-                            color: Global.redLocationIconColor,
-                            size: 14,
-                          ),
-                        ),
-                      ),
-                    ) ,
-                    Transform(
-                      transform: Matrix4.identity()..translate(0.0,10.0),
-                      child: Text(
-                        labelDetails[idx].labelName,
-                        style: TextStyle(
-                          fontSize: 6.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-        )
-
       ],
     );
   }

@@ -10,12 +10,13 @@ class ResetButtonWidget extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomRight,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(0.0),
         child: Transform.rotate(
           angle: 45 * (3.14159265359 / 180), // Rotate by 45 degrees (in radians)
           child: IconButton(
             onPressed: () {
               model.reset();
+             // model.currAngle = model.currAngle + 0.01745329252;
             },
             icon: Icon(Icons.assistant_navigation),
             iconSize: 60,

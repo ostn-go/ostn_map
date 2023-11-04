@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:custom_zoomable_floorplan/core/models/models.dart';
 import 'package:custom_zoomable_floorplan/core/viewmodels/user_location.dart';
 import 'package:custom_zoomable_floorplan/view/shared/global.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 
 import '../../services/MapDataService.dart';
 
@@ -31,13 +33,25 @@ class FloorPlan {
 
 class FloorPlanModel extends ChangeNotifier {
   double _scale = 1.0;
+  double _previousAngle = 0.0;
+  double _angle = 0.0;
   double _previousScale = 1.0;
   Pos _pos = Pos(0.0, 0.0);
-  Pos _cus_pos = Pos(0.0, 0.0);
+  Pos _cusPos = Pos(0.0, 0.0);
   Pos _previousPos = Pos(0.0, 0.0);
   Pos _endPos = Pos(0.0, 0.0);
   bool _isScaled = false;
+  bool _isDirectionDots = false;
 
+  bool get isDirectionDots => _isDirectionDots;
+
+  set isDirectionDots(value) {
+    _isDirectionDots = value;
+    notifyListeners();
+  }
+
+  double get previousAngle => _previousAngle;
+  double get currAngle => _angle;
   double get scale => _scale;
   double get previousScale => _previousScale;
   Pos get pos => _pos;
@@ -52,24 +66,33 @@ class FloorPlanModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Pos get cus_pos => _cus_pos;
-  set cus_pos(value) {
-    _cus_pos = value;
+  set currAngle(value) {
+    _angle = value;
+    notifyListeners();
+  }
+  Pos get cusPos => _cusPos;
+  set cusPos(value) {
+    _cusPos = value;
     notifyListeners();
   }
 
-  List<Light> _lights = Global.lights.map((item) => Light.fromMap(item)).toList();
-  List<Light> get lights => _lights;
 
   void handleDragScaleStart(ScaleStartDetails details) {
-    _hasTouched = true;
     _previousScale = _scale;
     _previousPos.x = (details.focalPoint.dx / _scale) - _endPos.x;
     _previousPos.y = (details.focalPoint.dy / _scale) - _endPos.y;
     notifyListeners();
+    if(details.pointerCount >= 2) {
+      _previousAngle = _angle;
+    }
   }
 
+
   void handleDragScaleUpdate(ScaleUpdateDetails details) {
+    if(details.pointerCount >= 2) {
+      _angle = details.rotation-_previousAngle;
+    }
+    _previousAngle = _angle;
     _scale = _previousScale * details.scale;
     if (_scale > 2.0) {
       _isScaled = true;
@@ -79,11 +102,12 @@ class FloorPlanModel extends ChangeNotifier {
 
     if (_scale < 1.0) {
       _scale = 1.0;
-    } else if (_scale > 4.0) {
-      _scale = 4.0;
+    } else if (_scale > 10.0) {
+      _scale = 10.0;
     } else if (_previousScale == _scale) {
       _pos.x = (details.focalPoint.dx / _scale) - _previousPos.x;
       _pos.y = (details.focalPoint.dy / _scale) - _previousPos.y;
+
     }
     notifyListeners();
   }
@@ -92,31 +116,24 @@ class FloorPlanModel extends ChangeNotifier {
     bool check = IsNavigationOn().isNavigationOn;
     IsNavigationOn().isNavigationOn = !check;
     _scale = 3.0;
+    //_angle=0.0;
+    _previousAngle=0.0;
     _previousScale = 1.0;
-    _pos = Pos(-1*UserLocation().pos.x, -1*UserLocation().pos.y);
+    double x = -1*UserLocation().pos.x;
+    double y = -1*UserLocation().pos.y;
+    _pos = Global.axisTransformation(Pos(x,y), _angle,_pos);
     _previousPos = Pos(0.0, 0.0);
     _endPos = Pos(0.0, 0.0);
     _isScaled = false;
     notifyListeners();
   }
 
-  trackUser()  {
-   // _scale = 3.0;
-   // _previousScale = 1.0;
-    _pos = Pos(-1*UserLocation().pos.x, -1*UserLocation().pos.y);
-    _previousPos = Pos(0.0, 0.0);
-    _endPos = Pos(0.0, 0.0);
-    _isScaled = false;
-    notifyListeners();
-  }
 
   moveToLabelLocation(double x,double y)  {
-    // _scale = 3.0;
-    // _previousScale = 1.0;
-
     _scale = 3.0;
     _previousScale = 1.0;
-    _pos = Pos(x, y);
+    _pos = Global.axisTransformation(Pos(x,y), _angle,_pos);
+
     _previousPos = Pos(0.0, 0.0);
     _endPos = Pos(0.0, 0.0);
     _isScaled = false;
@@ -124,6 +141,7 @@ class FloorPlanModel extends ChangeNotifier {
   }
 
   void handleDragScaleEnd() {
+    _previousAngle = _angle;
     _previousScale = 1.0;
     _endPos = _pos;
     notifyListeners();

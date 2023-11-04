@@ -39,9 +39,23 @@ class MinMapTileSize {
   double minMapTileSize;
 
   factory MinMapTileSize() {
-    _instance ??= MinMapTileSize._(0.0);
+    _instance ??= MinMapTileSize._(7.0);
     return _instance!;
   }
 
   MinMapTileSize._(this.minMapTileSize);
+}
+
+
+class FloorMapUrl {
+  static FloorMapUrl? _instance;
+  String imageUrl;
+  int currentFloor;
+
+  factory FloorMapUrl() {
+    _instance ??= FloorMapUrl._("",0);
+    return _instance!;
+  }
+
+  FloorMapUrl._(this.imageUrl,this.currentFloor);
 }
