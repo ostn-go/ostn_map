@@ -43,7 +43,8 @@ class SearchButtonWidget extends StatelessWidget {
                   fontSize: 16.0, // Text size
                 ),
               ),
-              SizedBox(width: 30.0), // Add spacing on the right
+              SizedBox(width: 30.0),
+              // Add spacing on the right
             ],
           ),
         ),

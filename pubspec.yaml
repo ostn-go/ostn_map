@@ -18,6 +18,12 @@ dependencies:
 
   cupertino_icons: ^1.0.3
   provider: ^6.0.5
+  flutter_timer_countdown: ^1.0.5
+  amazon_cognito_identity_dart_2: ^1.0.5
+  flutter_aws_s3_client: ^0.5.3
+  panorama: ^0.4.1
+  logger: ^1.0.0
+  amplify_flutter: ^0.5.1
 
 dev_dependencies:
   flutter_test:

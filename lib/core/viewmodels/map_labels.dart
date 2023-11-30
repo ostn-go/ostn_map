@@ -91,3 +91,46 @@ class TransportDetailsResult {
   TransportDetailsResult._(this.transportDetails);
 }
 
+
+class BuildingDetails {
+  int buildingId = 0;
+  String buildingName = "TAJ";
+  int lat=0;
+  int lon=0;
+  String description = "description";
+  String city = "city";
+  String street = "street";
+  String landmark = "landmark";
+  String pinCode = "pin";
+  String country = "country";
+  String phoneNumber = "phone number";
+
+
+  BuildingDetails(buildingId,buildingName,lat,lon,description,city,street,landmark,pinCode,country,phoneNumber) {
+    this.buildingId = buildingId;
+    this.buildingName = buildingName;
+    this.lat = lat;
+    this.lon = lon;
+    this.description = description;
+    this.city = city;
+    this.street = street;
+    this.landmark = landmark;
+    this.pinCode = pinCode;
+    this.country = country;
+    this.phoneNumber = phoneNumber;
+
+
+  }
+}
+
+class BuildingDetailsResult {
+  static BuildingDetailsResult? _instance;
+  List<BuildingDetails> buildingDetails;
+
+  factory BuildingDetailsResult() {
+    _instance ??= BuildingDetailsResult._([]);
+    return _instance!;
+  }
+
+  BuildingDetailsResult._(this.buildingDetails);
+}

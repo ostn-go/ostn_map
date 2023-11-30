@@ -19,8 +19,8 @@ Future<List<dynamic>> fetchData() async {
 
 }
 
-Future<List<dynamic>> fetchLabels() async {
-  final response = await http.get(Uri.parse('http://localhost:8082/ostn/label/get/1001'));
+Future<List<dynamic>> fetchLabels(String buildingId) async {
+  final response = await http.get(Uri.parse('http://localhost:8082/ostn/label/get/'+buildingId));
   if (response.statusCode == 200) {
     // Parse the JSON response if successful
     final data = jsonDecode(response.body);
@@ -29,12 +29,10 @@ Future<List<dynamic>> fetchLabels() async {
   } else {
     return [];
   }
-
-
 }
 
-Future<List<dynamic>> fetchBuildingMap() async {
-  final response = await http.get(Uri.parse('http://localhost:8082/ostn/building/1001/'));
+Future<List<dynamic>> fetchBuildingMap(String buildingId) async {
+  final response = await http.get(Uri.parse('http://localhost:8082/ostn/building/'+buildingId + "/"));
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
 
@@ -44,8 +42,8 @@ Future<List<dynamic>> fetchBuildingMap() async {
   }
 }
 
-Future<List<dynamic>> fetchTransportDetails() async {
-  final response = await http.get(Uri.parse('http://localhost:8082/ostn/transport_mode/1001'));
+Future<List<dynamic>> fetchTransportDetails(String buildingId) async {
+  final response = await http.get(Uri.parse('http://localhost:8082/ostn/transport_mode/'+buildingId+"/"));
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
 
@@ -133,4 +131,16 @@ Future<dynamic> fetchDirectionDots(DirectionDotRequest directionDotRequest) asyn
   }
 
 
+}
+
+Future<List<dynamic>> fetchBuildingDetails() async {
+  final response = await http.get(Uri.parse('http://localhost:8082/ostn/building/get'));
+  if (response.statusCode == 200) {
+    // Parse the JSON response if successful
+    final data = jsonDecode(response.body);
+
+    return data;
+  } else {
+    return [];
+  }
 }

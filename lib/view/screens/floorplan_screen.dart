@@ -1,4 +1,5 @@
 import 'package:custom_zoomable_floorplan/core/viewmodels/floorplan_model.dart';
+import 'package:custom_zoomable_floorplan/view/screens/panorama_screen.dart';
 import 'package:custom_zoomable_floorplan/view/shared/global.dart';
 import 'package:custom_zoomable_floorplan/view/widgets/direction_dots_widget.dart';
 import 'package:custom_zoomable_floorplan/view/widgets/gridview_widget.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../core/models/models.dart';
 import '../../core/viewmodels/map_labels.dart';
 import '../../core/viewmodels/user_location.dart';
+import '../widgets/main_login_widget.dart';
 import '../widgets/raw_rotation_gesture.dart';
 import '../widgets/search_button_widget.dart';
 import 'CustomSearchDelegate.dart';
@@ -137,6 +139,31 @@ class _FloorPlanScreen extends State<FloorPlanScreenWidget> {
                     ),
                   ),
                 ),
+                if(model.isDirectionDots)
+                  Positioned(
+                    top: 150, // Adjust the position as needed
+                    right: 30, // Adjust the position as needed
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(_customPageRoute('/panorama'));
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Global.searchBarBlack,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.boy_rounded , // Choose the icon you want
+                            color: Colors.yellow,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ResetButtonWidget(),
                 SearchButtonWidget(
                   onPressedCallback: () {
@@ -146,6 +173,31 @@ class _FloorPlanScreen extends State<FloorPlanScreenWidget> {
                       delegate: CustomSearchDelegate(), // Your custom delegate
                     );
                   },
+                ),
+
+                Positioned(
+                  top: 75, // Adjust the position as needed
+                  right: 30, // Adjust the position as needed
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(_loginPageRoute('/login'));
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Global.searchBarBlack,
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.account_circle , // Choose the icon you want
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -288,3 +340,47 @@ The build() method first gets the model from the context. Then, it creates a Sca
 
 
  */
+
+
+PageRoute _customPageRoute(String routeName) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return PanoramaScreen(); // Replace with the widget for your target route
+    },
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.easeInOut;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+    settings: RouteSettings(name: routeName),
+  );
+}
+
+PageRoute _loginPageRoute(String routeName) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return MainView(); // Replace with the widget for your target route
+    },
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.easeInOut;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+    settings: RouteSettings(name: routeName),
+  );
+}
+

@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../core/viewmodels/floorplan_model.dart';
+import '../../main.dart';
+import '../widgets/main_login_widget.dart';
 
 abstract class Global {
   static const Color blue = const Color(0xFF78909C);
@@ -30,3 +32,6 @@ abstract class Global {
     return Pos(axisTX,axisTY);
   }
 }
+
+
+

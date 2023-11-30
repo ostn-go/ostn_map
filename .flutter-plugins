@@ -1,4 +1,9 @@
 # This is a generated file; do not edit or check into version control.
+amplify_core=/Users/malavikasp/.pub-cache/hosted/pub.dev/amplify_core-0.5.1/
+amplify_flutter=/Users/malavikasp/.pub-cache/hosted/pub.dev/amplify_flutter-0.5.1/
+amplify_flutter_android=/Users/malavikasp/.pub-cache/hosted/pub.dev/amplify_flutter_android-0.5.1/
+amplify_flutter_ios=/Users/malavikasp/.pub-cache/hosted/pub.dev/amplify_flutter_ios-0.5.1/
+motion_sensors=/Users/malavikasp/.pub-cache/hosted/pub.dev/motion_sensors-0.1.0/
 path_provider=/Users/malavikasp/.pub-cache/hosted/pub.dev/path_provider-2.1.1/
 path_provider_android=/Users/malavikasp/.pub-cache/hosted/pub.dev/path_provider_android-2.2.0/
 path_provider_foundation=/Users/malavikasp/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.1/

@@ -34,13 +34,22 @@ class _DirectionDotViewWidgetState extends State<DirectionDotViewWidget> {
           DirectionDotEnd().pos.y,
           BuildingMapDetailsResult().buildingDetails[0].map, 50
       );
-      fetchDirectionDots(directionDotRequest).then((data) {
-        if(mounted) {
+      if (mounted){
+        fetchDirectionDots(directionDotRequest).then((data) {
           setState(() {
             dotPosition = data;
+
+            DirectionDotResult().directionDots = dotPosition.map((dynamic item) {
+              return DotPos(
+                  item["x"],
+                  item["y"]
+              );
+            }).toList();
+        //   print(DirectionDotResult().directionDots);
+
           });
-        }
-      });
+        });
+    }
     });
   }
   }
